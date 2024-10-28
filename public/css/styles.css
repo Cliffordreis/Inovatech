@@ -1,0 +1,7 @@
+body {
+    background-color: #4000ff !important;
+}
+.custom-navbar {
+    background-color: rgba(0, 0, 0, 0.5); /* Preto com 50% de opacidade */
+    backdrop-filter: blur(5px); /* Desfoca o conteúdo atrás da navbar */
+}
