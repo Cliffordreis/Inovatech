@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             },
             "size": {
-                "value": 3,
+                "value": 5,
                 "random": true,
                 "anim": {
                     "enable": false,
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 "distance": 150,
                 "color": "#ffffff",
                 "opacity": 0.4,
-                "width": 1
+                "width": 2
             },
             "move": {
                 "enable": true,
