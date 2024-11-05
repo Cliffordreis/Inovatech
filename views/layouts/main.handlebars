@@ -44,6 +44,29 @@
                     </ul>
                 </div>
                 {{else}}
+                <div>
+                    <li class="nav-item dropdown m-2">
+                        <a class="" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/images/carrinho.png" width="40" height="38">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <div class="m-3 carrinho">
+                                <h3>Carrinho:</h3>
+                                <hr>
+                                {{#each carrinho}}
+                                    <div>
+                                    <li>{{this.name}} - {{this.valor}} - {{this.specs}}</li>
+                                    <form action="/apagaritem/{{this.id}}" method="post">
+                                     <button type="submit">Apagar Item</button>
+                                    </form>
+                            </div>
+                            {{/each}}
+
+                                <button class="btn btn-transparent justify-content-botton">finalizar compras</button>
+                            </div>
+                        </ul>
+                    </li>
+                </div>
                 <div class="m-2">
                     <a href="/cadastro">
                         <button class="btn btn-transparent">Cadastre-se</button>
