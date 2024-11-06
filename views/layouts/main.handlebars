@@ -10,77 +10,7 @@
 <body>
     <!-- Div do particles.js -->
     <div id="particles-js"></div>
-    
-    <!-- Navbar e outros conteúdos -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top custom-navbar" aria-label="Fourth navbar example">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/" id="namNav">
-                <img src="/images/logo.png" alt="Logo" width="59" height="38" class="d-inline-block align-text-center">
-                Inovatech
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarsExample04" data-bs-theme="dark">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0 ">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false">Marcas</a>
-                        <ul class="dropdown-menu test">
-                            <li><a class="dropdown-item text-white" href="#">Xiaomi</a></li>
-                            <li><a class="dropdown-item text-white" href="#">Oppo</a></li>
-                            <li><a class="dropdown-item text-white" href="#">Realm</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                {{#if status}}
-                <div class="">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
-                        Olá, {{Vnick}}
-                    </a>
-                    <ul class="dropdown-menu text-small shadow">
-                        <li><a class="dropdown-item" href="#">Perfil</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                    </ul>
-                </div>
-                {{else}}
-                <div>
-                    <li class="nav-item dropdown m-2">
-                        <a class="" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/images/carrinho.png" width="40" height="38">
-                        </a>
-                        <ul class="dropdown-menu">
-                            <div class="m-3 carrinho">
-                                <h3>Carrinho:</h3>
-                                <hr>
-                                {{#each carrinho}}
-                                    <div>
-                                    <li>{{this.name}} - {{this.valor}} - {{this.specs}}</li>
-                                    <form action="/apagaritem/{{this.id}}" method="post">
-                                     <button type="submit">Apagar Item</button>
-                                    </form>
-                            </div>
-                            {{/each}}
-
-                                <button class="btn btn-transparent justify-content-botton">finalizar compras</button>
-                            </div>
-                        </ul>
-                    </li>
-                </div>
-                <div class="m-2">
-                    <a href="/cadastro">
-                        <button class="btn btn-transparent">Cadastre-se</button>
-                    </a>
-                </div>
-                <div class="m-2">
-                    <a href="/login">
-                        <button class="btn btn-transparent">Login</button>
-                    </a>
-                </div>
-                {{/if}}
-            </div>
-        </div>
-    </nav>
+    {{> navbar}}
     <br>
     <br>
     <br>
