@@ -3,9 +3,12 @@ const app = express();
 app.locals.carrinho = "seu carrinho está vazio";
 const smartphones = require('./models/smartphones')
 const session = require('express-session');
+const Users = require('./models/users');
+app.locals.Vnick;
+app.locals.status = false;
 
 app.use(session({
-    secret: 'chave-secreta', // Use uma chave segura
+    secret: 'chave-secreta',
     resave: false,
     saveUninitialized: true
 }));
@@ -128,12 +131,61 @@ app.post('/aumentar/:id', (req, res) => {
     res.redirect('back'); // Retorna para a página anterior
 });
 
+//add user
+app.post('/adduser', function(req, res) {
+    const {email, senha, confirmacao} = req.body
+    if (senha !== confirmacao){
+        return res.render('cadastro', {error: "as senhas não coincidem!"})
+    }
+    Users.findOne({
+        where: {email : email}
+    }).then(function(resultado){
+        if(resultado){
+        res.render('cadastro', {error: "esse email já possue registro no sistema!"})
+        }else {
+            Users.create({
+                nome : req.body.nome,
+                sobrenome : req.body.sobrenome,
+                nick : req.body.nome + " " + req.body.sobrenome,
+                email : req.body.email,
+                senha: req.body.senha
+            }).then(function (){
+                res.redirect('/login')
+            }).catch(function(error){
+                res.send("houve um erro "+error)
+            })
+            }
+    })
+    
+})
 
-app.post('/apagaritem/:id', (req, res) => {
-    const itemId = req.params.id; // Captura a ID da URL
-    req.session.carrinho = (req.session.carrinho || []).filter(item => item.id != itemId);
-    res.redirect('back')
-});
+//login
+app.post('/entrando', (req, res) => {
+    const email = req.body.email
+    const senha = req.body.senha
+
+    Users.findOne({
+        where : {email : email,
+                senha : senha}
+    }).then(function (user) {
+        if(user){
+        app.locals.Vnick = user.nick;
+        app.locals.status = true;
+        res.redirect('/')
+        }else{
+            res.render('login', {error: 'usuario e senha não encontrados!'})
+        }
+    }).catch(function(error){
+        res.render("erro "+ error)
+    })
+})
+
+//logout
+app.get('/logout', (req, res) => {
+    app.locals.status = false;
+    app.locals.Vnick = null;
+    res.redirect('/')
+})
 
 app.listen(3000, function(){
     console.log("servidor ativo na url: http://localhost:3000")

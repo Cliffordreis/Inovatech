@@ -1,3 +1,5 @@
+
+//conf particles.js
 document.addEventListener("DOMContentLoaded", function() {
     particlesJS("particles-js", {
         "particles": {

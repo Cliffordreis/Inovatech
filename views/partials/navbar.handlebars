@@ -18,65 +18,105 @@
                         </ul>
                     </li>
                 </ul>
-                {{#if status}}
-                <div class="">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
-                        Olá, {{Vnick}}
-                    </a>
-                    <ul class="dropdown-menu text-small shadow">
-                        <li><a class="dropdown-item" href="#">Perfil</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                    </ul>
-                </div>
-                {{else}}
-                <div>
-                    <li class="nav-item dropdown m-2">
-                        <a class="" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/images/carrinho.png" width="40" height="38">
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{total}}
-                            <span class="visually-hidden">unread messages</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <div class="m-3 carrinho">
-                                <h3>Carrinho:</h3>
-                                <hr>
-                                {{#if carrinho}}
-                                {{#each carrinho}}
-                                    <div class="carrinhoitem m-2">
-                                    <li>
-                                        <img src="/images/{{this.id}}.png" width="40" height="38">
-                                        {{this.name}} <br> R$: {{this.valor}} - {{this.specs}}
-                                    </li>
-                                        <div class="qty mt-3"> 
-                                            <form method="post">
-                                                <button formaction="/diminuir/{{this.id}}" formmethod="post" class="minus bg-dark">-</button>
-                                                <input type="number" class="count text-white" name="qty" value="{{quantidade}}" readonly>
-                                                <button formaction="/aumentar/{{this.id}}" formmethod="post" class="plus bg-dark">+</button>
-                                            </form>
+                {{!-- if central --}}
+                {{#if status}} 
+                    <div>
+                        <li class="dropdown m-2">
+                            <a class="" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/images/carrinho.png" width="40" height="38">
+                                <span class="mx-auto translate-middle badge rounded-pill bg-danger">
+                                    {{total}}
+                                <span class="visually-hidden">unread messages</span>
+                            </a>
+                            <ul class="dropdown-menu carrinho-menu">
+                                <div class="m-3 carrinho">
+                                    <h3>Carrinho:</h3>
+                                    <hr>
+                                    {{#if carrinho}}
+                                    {{#each carrinho}}
+                                        <div class="carrinhoitem m-2">
+                                        <li>
+                                            <img src="/images/{{this.id}}.png" width="40" height="38">
+                                            {{this.name}} <br> R$: {{this.valor}} - {{this.specs}}
+                                        </li>
+                                            <div class="qty mt-3"> 
+                                                <form method="post">
+                                                    <button formaction="/diminuir/{{this.id}}" formmethod="post" class="minus bg-dark">-</button>
+                                                    <input type="number" class="count text-white" name="qty" value="{{quantidade}}" readonly>
+                                                    <button formaction="/aumentar/{{this.id}}" formmethod="post" class="plus bg-dark">+</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                {{/each}}
-                                    <button class="btn btn-transparent justify-content-botton">finalizar compras</button>
-                                {{else}}
-                                    <h5> seu carrinho está vazio...</h5>
-                                {{/if}}
-                            </div>
+                                    {{/each}}
+                                        <button class="btn btn-transparent justify-content-botton">finalizar compras</button>
+                                    {{else}}
+                                        <h5> seu carrinho está vazio...</h5>
+                                    {{/if}}
+                                </div>
+                            </ul>
+                        </li>
+                    </div>
+                    <div class=" dropdown">
+                        <a href="" class="d-block link-body-emphasis text-decoration-none dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
+                             Olá, {{Vnick}}
+                        </a>
+                        <ul class="dropdown-menu text-small shadow perfil-menu" style="mx-auto" data-popper-placement="bottom-end">
+                            <li><a class="dropdown-item" href="">Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">logout</a></li>
                         </ul>
-                    </li>
-                </div>
-                <div class="m-2">
-                    <a href="/cadastro">
-                        <button class="btn btn-transparent">Cadastre-se</button>
-                    </a>
-                </div>
-                <div class="m-2">
-                    <a href="/login">
-                        <button class="btn btn-transparent">Login</button>
-                    </a>
-                </div>
+                    </div>
+
+                {{!-- else central --}}
+                {{else}}
+                    <div>
+                        <li class="nav-item dropdown m-2">
+                            <a class="" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/images/carrinho.png" width="40" height="38">
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{total}}
+                                <span class="visually-hidden">unread messages</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <div class="m-3 carrinho">
+                                    <h3>Carrinho:</h3>
+                                    <hr>
+                                    {{#if carrinho}}
+                                    {{#each carrinho}}
+                                        <div class="carrinhoitem m-2">
+                                        <li>
+                                            <img src="/images/{{this.id}}.png" width="40" height="38">
+                                            {{this.name}} <br> R$: {{this.valor}} - {{this.specs}}
+                                        </li>
+                                            <div class="qty mt-3"> 
+                                                <form method="post">
+                                                    <button formaction="/diminuir/{{this.id}}" formmethod="post" class="minus bg-dark">-</button>
+                                                    <input type="number" class="count text-white" name="qty" value="{{quantidade}}" readonly>
+                                                    <button formaction="/aumentar/{{this.id}}" formmethod="post" class="plus bg-dark">+</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    {{/each}}
+                                        <button class="btn btn-transparent justify-content-botton">finalizar compras</button>
+                                    {{else}}
+                                        <h5> seu carrinho está vazio...</h5>
+                                    {{/if}}
+                                </div>
+                            </ul>
+                        </li>
+                    </div>
+                        <div class="m-2">
+                            <a href="/cadastro">
+                                <button class="btn btn-transparent">Cadastre-se</button>
+                            </a>
+                        </div>
+                        <div class="m-2">
+                            <a href="/login">
+                                <button class="btn btn-transparent">Login</button>
+                            </a>
+                        </div>
                 {{/if}}
+                {{!-- fim if cental --}}
             </div>
         </div>
     </nav>
