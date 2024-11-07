@@ -53,7 +53,7 @@
 }
 
 .carrinho {
-    max-height: 300px; /* Limita a altura do carrinho */
+    max-height: 400px; /* Limita a altura do carrinho */
     width: 250px; /* Define a largura */
     overflow-y: auto; /* Habilita rolagem quando necessário */
     border-radius: 8px; /* Bordas arredondadas */

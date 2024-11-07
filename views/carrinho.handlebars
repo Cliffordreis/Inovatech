@@ -1,0 +1,23 @@
+
+<div class="container-fluid d-flex justify-content-center my-5" data-bs-theme="dark">
+        <div id="cad" class="card col-10 col-sm-8 col-md-6 col-lg-4 p-3 text-center">
+                <h3 class="m-2">Carrinho:</h3>
+                <hr>
+                 {{#each carrinho}}
+                <div class="qty mt-3 mb-3"> 
+                    <li class="">
+                        <img src="/images/{{this.id}}.png" width="40" height="38">
+                        {{this.name}} <br> R$: {{this.valor}} - {{this.specs}}
+                    </li>
+                    <form method="post">
+                        <button formaction="/diminuir/{{this.id}}" formmethod="post" class="minus bg-dark">-</button>
+                        <input type="number" class="count text-white" name="qty" value="{{quantidade}}" readonly>
+                        <button formaction="/aumentar/{{this.id}}" formmethod="post" class="plus bg-dark">+</button>
+                    </form>
+                </div>
+                    {{/each}}
+        </div>
+</div>
+
+
+

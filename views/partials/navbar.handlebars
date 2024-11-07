@@ -48,7 +48,7 @@
                                             </div>
                                         </div>
                                     {{/each}}
-                                        <button class="btn btn-transparent justify-content-botton">finalizar compras</button>
+                                        <a href="/carrinho"><button class="btn btn-transparent justify-content-botton">finalizar compras</button></a>
                                     {{else}}
                                         <h5> seu carrinho está vazio...</h5>
                                     {{/if}}
@@ -97,7 +97,9 @@
                                             </div>
                                         </div>
                                     {{/each}}
-                                        <button class="btn btn-transparent justify-content-botton">finalizar compras</button>
+                                        <h5 class="m-2">Subtotal R$:{{formatCurrency totalv}}</h5>
+                                        <hr>
+                                        <a href="/carrinho"><button class="btn btn-transparent justify-content-botton">finalizar compras</button></a>
                                     {{else}}
                                         <h5> seu carrinho está vazio...</h5>
                                     {{/if}}

@@ -24,6 +24,9 @@ app.engine('handlebars', expressHandlebars.engine({
     helpers: {
         eq: function(a, b) {
             return a === b;
+        },
+        formatCurrency: function(value) {
+            return parseFloat(value).toFixed(2); // Formata para 2 casas decimais
         }
     }
 }));
@@ -35,11 +38,13 @@ app.use(express.static('public'));
 app.use((req, res, next) => {
     // Se o carrinho ainda não existir na sessão, inicialize-o
     if (!req.session.carrinho) {
-        req.session.carrinho = [];     
+        req.session.carrinho = [];
+        req.session.totalv = 0;     
     }
     // Define o carrinho atual no res.locals para acesso global nos templates
     res.locals.carrinho = req.session.carrinho;
     res.locals.total = req.session.carrinho.length;
+    res.locals.totalv = req.session.totalv;
     next();
 });
 
@@ -67,8 +72,34 @@ app.get('/cadastro', function(req,res){
 })
 
 //carrinho (add/delete)
+// Middleware para tornar o carrinho e totalv acessíveis globalmente
+app.use((req, res, next) => {
+    // Inicializa o carrinho e totalv se não existirem
+    if (!req.session.carrinho) {
+        req.session.carrinho = [];
+        req.session.totalv = 0; // Inicializa o totalv na sessão
+    }
+
+    // Passa o totalv para o template via res.locals
+    res.locals.carrinho = req.session.carrinho;
+    res.locals.totalv = req.session.totalv;
+    next();
+});
+
+// Rota para adicionar item ao carrinho
+// Middleware para tornar o carrinho e totalv acessíveis globalmente
+app.use((req, res, next) => {
+    if (!req.session.carrinho) {
+        req.session.carrinho = [];
+        req.locals.totalv = 0; // Inicializa totalv como número
+    }
+
+    next();
+});
+
+// Rota para adicionar item ao carrinho
 app.post('/addcarrinho/:id', async (req, res) => {
-    const id = req.body.cod; // Pega o id do item enviado pelo formulário
+    const id = req.params.id;
 
     try {
         const item = await smartphones.findByPk(id);
@@ -76,36 +107,39 @@ app.post('/addcarrinho/:id', async (req, res) => {
             return res.status(404).send("Item não encontrado.");
         }
 
-        // Inicializa o carrinho se ele não existir
-        if (!req.session.carrinho) {
-            req.session.carrinho = [];
-        }
-
         // Verifica se o item já existe no carrinho
         const itemIndex = req.session.carrinho.findIndex(carrinhoItem => carrinhoItem.id === item.id);
 
         if (itemIndex >= 0) {
-            // Se o item já existe, incrementa a quantidade
+            // Incrementa a quantidade do item existente
             req.session.carrinho[itemIndex].quantidade += 1;
         } else {
-            // Se o item não existe, adiciona com a quantidade inicial de 1
+            // Adiciona o item novo com quantidade inicial de 1
             req.session.carrinho.push({
                 id: item.id,
                 name: item.namecell,
                 specs: item.specs,
-                valor: item.valor,
+                valor: item.valor, // Converte valor em número
                 quantidade: 1,
             });
         }
 
-        console.log("Item adicionado ao carrinho:", req.session.carrinho); // Verificação
+        // Atualiza o totalv com o valor numérico do item
+        req.session.totalv += item.valor;
+        res.locals.totalv = req.session.totalv;
 
-        res.redirect('/'); // Redireciona para a página inicial ou para o carrinho
+        console.log("Item adicionado ao carrinho:", req.session.carrinho);
+        console.log("Valor total do carrinho (totalv):", req.session.totalv);
+
+        res.redirect('/');
     } catch (error) {
-        console.error("Erro ao adicionar item ao carrinho:", error); // Log do erro
-        res.status(500).send("Erro no servidor: " + error.message); // Envia mensagem de erro
+        console.error("Erro ao adicionar item ao carrinho:", error);
+        res.status(500).send("Erro no servidor: " + error.message);
     }
 });
+
+
+
 
 app.post('/diminuir/:id', (req, res) => {
     const itemId = req.params.id; // Corrigido para req.params.id
@@ -115,10 +149,20 @@ app.post('/diminuir/:id', (req, res) => {
         if (req.session.carrinho[itemIndex].quantidade > 1) {
             // Decrementa a quantidade do item
             req.session.carrinho[itemIndex].quantidade -= 1;
+            req.session.totalv -= req.session.carrinho[itemIndex].valor;
+        
+            // Atualiza o totalv no res.locals para uso global
+            res.locals.totalv = req.session.totalv;
         } else {
             // Remove o item do carrinho se a quantidade é 1
+
+            req.session.totalv -= req.session.carrinho[itemIndex].valor;
+        
+        // Atualiza o totalv no res.locals para uso global
+            res.locals.totalv = req.session.totalv;
             req.session.carrinho.splice(itemIndex, 1);
         }
+    
     }
 
     res.redirect('back'); // Retorna para a página anterior
@@ -130,9 +174,18 @@ app.post('/aumentar/:id', (req, res) => {
 
     if (itemIndex >= 0) { // Verifica se o item existe no carrinho
             req.session.carrinho[itemIndex].quantidade += 1;
+        // Adiciona o valor do item ao totalv com base no valor unitário do item
+            req.session.totalv += req.session.carrinho[itemIndex].valor;
+        
+        // Atualiza o totalv no res.locals para uso global
+            res.locals.totalv = req.session.totalv;
     }
     res.redirect('back'); // Retorna para a página anterior
 });
+
+app.get('/carrinho', function(req,res){
+    res.render('carrinho');
+})
 
 //add user
 app.post('/adduser', function(req, res) {
