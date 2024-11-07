@@ -43,6 +43,9 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/bootstrap-icons', express.static(__dirname + '/node_modules/bootstrap-icons/font'));
+
+
 
 //body parser
 const bodyParser = require('body-parser');

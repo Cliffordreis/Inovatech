@@ -75,6 +75,12 @@ a[data-bs-toggle="dropdown"] {
     text-decoration: none; /* Remove sublinhado */
 }
 
+.footer-c{
+    color: white !important;
+    width: 100%;
+}
+ 
+
 /* Ajuste para o dropdown do carrinho */
 .carrinho-menu {
     position: absolute !important;
@@ -147,11 +153,6 @@ li::marker {
     background-color: #717fe0 !important;
 }
 /*Prevent text selection*/
-button{
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
 input{  
     border: 0;
     width: 2%;
