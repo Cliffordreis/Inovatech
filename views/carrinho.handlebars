@@ -1,23 +1,67 @@
+<div class="container-fluid d-flex justify-content-center my-2" data-bs-theme="dark">
+    <div id="cad" class="card col-10 col-sm-8 col-md-8 col-lg-6 p-3 text-center">
+        <h3 class="m-2">{{Vnick}}, finalize sua compra</h3>
+        <hr>
 
-<div class="container-fluid d-flex justify-content-center my-5" data-bs-theme="dark">
-        <div id="cad" class="card col-10 col-sm-8 col-md-6 col-lg-4 p-3 text-center">
-                <h3 class="m-2">Carrinho:</h3>
-                <hr>
-                 {{#each carrinho}}
-                <div class="qty mt-3 mb-3"> 
-                    <li class="">
-                        <img src="/images/{{this.id}}.png" width="40" height="38">
-                        {{this.name}} <br> R$: {{this.valor}} - {{this.specs}}
-                    </li>
-                    <form method="post">
+        <div class="qty mt-3 mb-3">
+            <div id="item" class="d-flex flex-column align-items-center gap-3">
+                {{#each carrinho}}
+                <div class="d-flex justify-content-center align-items-center gap-4">
+                    <img src="/images/{{this.id}}.png" width="80" height="78">
+
+                    <div class="text-center">
+                        <h4 class="mb-1">{{this.name}}</h4>
+                        <p class="mb-1">{{this.specs}} R$: {{this.valor}}</p>
+                    </div>
+
+                    <form method="post" class="d-flex align-items-center gap-2">
                         <button formaction="/diminuir/{{this.id}}" formmethod="post" class="minus bg-dark">-</button>
-                        <input type="number" class="count text-white" name="qty" value="{{quantidade}}" readonly>
+                        <input type="number" class="count text-white text-center" name="qty" value="{{quantidade}}" readonly style="width: 50px;">
                         <button formaction="/aumentar/{{this.id}}" formmethod="post" class="plus bg-dark">+</button>
                     </form>
                 </div>
-                    {{/each}}
+                {{/each}}
+            </div>
         </div>
+
+        <hr>
+        <h3>Endereço:</h3>
+
+        <form class="row g-3">
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">Endereço</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="Digite o nome da sua rua">
+            </div>
+
+            <div class="col-md-2">
+                <label for="inputZip" class="form-label">Número</label>
+                <input type="text" class="form-control" id="inputZip">
+            </div>
+
+            <div class="col-md-4">
+                <label for="estado" class="form-label">Estado</label>
+                <select id="estado" class="form-select" onchange="carregarCidades()">
+                    <option selected>Escolha um estado</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label for="cidade" class="form-label">Cidade</label>
+                <select id="cidade" class="form-select" disabled>
+                    <option selected>Escolha uma cidade</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="inputZip" class="form-label">CEP</label>
+                <input type="text" class="form-control" id="inputZip">
+            </div>
+        </form>
+
+        <div class="m-3">
+            <h5> Subtotal R$: {{formatCurrency totalv}}</h5>
+            <h5 id="frete" hidden>Frete R$: 15,00</h5>
+            <h3>Total R$: {{formatCurrency totalv}}</h3>
+        </div>
+    </div>
 </div>
-
-
-

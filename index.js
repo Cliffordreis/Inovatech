@@ -184,7 +184,11 @@ app.post('/aumentar/:id', (req, res) => {
 });
 
 app.get('/carrinho', function(req,res){
+    if (app.locals.status == true){
     res.render('carrinho');
+    }else{
+    res.render('login')
+    }
 })
 
 //add user
