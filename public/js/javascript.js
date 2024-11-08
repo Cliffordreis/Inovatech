@@ -97,56 +97,110 @@ async function carregarEstados() {
 
 // Função para carregar as cidades do estado selecionado
 // Função para carregar os estados
-async function carregarEstados() {
-    const estadoSelect = document.getElementById("estado");
-    const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
-    const estados = await response.json();
+document.addEventListener("DOMContentLoaded", async () => {
+    await carregarEstados(); // Carrega os estados na inicialização
 
-    // Popula o select de estados com os dados retornados
-    estados.forEach(estado => {
-        const option = document.createElement("option");
-        option.value = estado.id;  // Usando o ID do estado
-        option.textContent = estado.nome;
-        estadoSelect.appendChild(option);
-    });
-}
+    const subtotalElement = document.getElementById("subtotal");
+    const freteElement = document.getElementById("frete");
+    const totalElement = document.getElementById("total");
 
-// Função para carregar as cidades com base no estado selecionado
-async function carregarCidades() {
-    const estadoSelect = document.getElementById("estado");
-    const cidadeSelect = document.getElementById("cidade");
-    const estadoId = estadoSelect.value;
-    const fretev = document.getElementById("frete");
+    // Extrai o subtotal inicial do conteúdo
+    let subtotal = parseFloat(subtotalElement.textContent.replace("Subtotal R$: ", "").replace(",", "."));
+    const freteValor = 15.00;
 
-    // Limpa as opções de cidade e desabilita o campo antes de carregar novas cidades
-    cidadeSelect.innerHTML = '<option selected>Escolha uma cidade</option>';
-    cidadeSelect.disabled = true;
-    fretev.hidden = true;
-
-    if (estadoId) {
-        // Carrega as cidades do estado selecionado
-        const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`);
-        if (!response.ok) {
-            console.error("Erro ao carregar cidades");
-            return;
+    // Atualiza o valor do total considerando o frete
+    function atualizarTotal() {
+        let total = subtotal;
+        if (!freteElement.hidden) {
+            total += freteValor;
         }
-
-        const cidades = await response.json();
-
-        // Adiciona as cidades ao select
-        cidades.forEach(cidade => {
-            const option = document.createElement("option");
-            option.value = cidade.nome;
-            option.textContent = cidade.nome;
-            cidadeSelect.appendChild(option);
-        });
-
-        // Habilita o campo de cidade após carregar as opções
-        cidadeSelect.disabled = false;
-        fretev.hidden = false;
+        totalElement.textContent = `Total R$: ${total.toFixed(2).replace(".", ",")}`;
     }
-}
+
+    // Função para carregar os estados
+    async function carregarEstados() {
+        const estadoSelect = document.getElementById("estado");
+        const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+        const estados = await response.json();
+
+        estados.forEach(estado => {
+            const option = document.createElement("option");
+            option.value = estado.id;
+            option.textContent = estado.nome;
+            estadoSelect.appendChild(option);
+        });
+    }
+
+    // Função para carregar as cidades e exibir o frete ao escolher o estado
+    window.carregarCidades = async function() {
+        const estadoSelect = document.getElementById("estado");
+        const cidadeSelect = document.getElementById("cidade");
+        const estadoId = estadoSelect.value;
+
+        // Limpa as cidades e desabilita o campo antes de carregar novas cidades
+        cidadeSelect.innerHTML = '<option selected>Escolha uma cidade</option>';
+        cidadeSelect.disabled = true;
+        freteElement.hidden = true;
+
+        if (estadoId) {
+            // Carrega as cidades do estado selecionado
+            const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`);
+            if (!response.ok) {
+                console.error("Erro ao carregar cidades");
+                return;
+            }
+
+            const cidades = await response.json();
+            cidades.forEach(cidade => {
+                const option = document.createElement("option");
+                option.value = cidade.nome;
+                option.textContent = cidade.nome;
+                cidadeSelect.appendChild(option);
+            });
+
+            cidadeSelect.disabled = false;
+            freteElement.hidden = false;
+            atualizarTotal(); // Atualiza o total ao exibir o frete
+        }
+    };
+});
+
 
 // Carrega os estados ao carregar a página
 carregarEstados();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const freteElement = document.getElementById("frete");
+    const totalElement = document.getElementById("total");
+    const subtotalElement = document.getElementById("subtotal");
+
+    let subtotal = parseFloat(subtotalElement.getAttribute("data-subtotal")); // Subtotal inicial
+    const freteValor = 15.00;
+
+    // Função para atualizar o total
+    function atualizarTotal() {
+        let total = subtotal;
+        if (!freteElement.hidden) {
+            total += freteValor;
+        }
+        totalElement.textContent = `Total R$: ${total.toFixed(2)}`;
+    }
+
+    // Observa alterações no hidden do frete
+    freteElement.addEventListener("change", atualizarTotal);
+
+    // Torna o frete visível ao clicar no botão de finalizar compra
+    document.querySelector(".btn").addEventListener("click", () => {
+        freteElement.hidden = false;
+        atualizarTotal();
+    });
+});
+
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+        document.getElementById('deleteForm').submit(); // Envia o formulário
+    });
+
+
+
 

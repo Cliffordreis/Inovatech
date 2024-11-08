@@ -247,6 +247,35 @@ app.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
+app.get('/user/:Vnick', async (req, res) => {
+    try {
+        const nick = req.params.Vnick;
+        const user = await Users.findOne({ where: { nick } });
+        
+        if (user) {
+            res.render('user', { user: user.toJSON() });
+        } else {
+            res.status(404).send('Usuário não encontrado');
+        }
+    } catch (error) {
+        res.status(500).send('Erro ao buscar usuário');
+    }
+});
+
+app.post('/delete/:Vnick', async (req, res) => {
+    try {
+        const nick = req.params.Vnick;
+        await Users.destroy({ where: { nick } });
+        app.locals.status = false;
+        app.locals.Vnick = null;
+        res.redirect('/')
+    } catch (error) {
+        res.status(500).send('Erro ao excluir conta');
+    }
+});
+
+
+
 app.listen(3000, function(){
     console.log("servidor ativo na url: http://localhost:3000")
 });
