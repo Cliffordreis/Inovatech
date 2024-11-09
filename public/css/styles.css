@@ -59,6 +59,13 @@
     border-radius: 8px; /* Bordas arredondadas */
 }
 
+@media (max-width: 768px) {
+    .carrinho {
+        width: auto; /* Define a largura para o máximo da tela */
+        /* Permite que ocupe toda a largura da tela pequena */
+    }
+}
+
 .carrinhoitem {
     background-color: #000000;
     margin-bottom: 10px; /* Espaço inferior entre os itens */
@@ -91,6 +98,7 @@ a[data-bs-toggle="dropdown"] {
 .perfil-menu {
     position: absolute !important;
     left: -25px !important; /* Ajuste conforme necessário */
+    max-width: 200px;
 }
 
 li::marker {
